@@ -36,7 +36,7 @@ if (titleRegex) {
 }
 
 /**
- * Process a pull request and outputs it's merge commit hash.
+ * Process a pull request and outputs its merge commit hash.
  *
  * @param {Object} PR
  */
@@ -52,7 +52,23 @@ function outputMergeCommitHash(PR) {
 }
 
 /**
- * Process a pull request and outputs it's merge actor
+ * Process a pull request and outputs its head commit hash.
+ *
+ * @param {Object} PR
+ */
+function outputHeadCommitHash(PR) {
+    if (!_.isEmpty(PR)) {
+        console.log(`Found matching pull request: ${PR.html_url}`);
+        core.setOutput('HEAD_COMMIT_SHA', PR.head.sha);
+    } else {
+        const err = new Error('Could not find matching pull request');
+        console.error(err);
+        core.setFailed(err);
+    }
+}
+
+/**
+ * Process a pull request and outputs its merge actor
  *
  * @param {Object} PR
  */
@@ -88,6 +104,7 @@ if (pullRequestNumber) {
     })
         .then(({data}) => {
             outputMergeCommitHash(data);
+            outputHeadCommitHash(data);
             outputMergeActor(data);
         })
         .catch(handleUnknownError);
@@ -103,6 +120,7 @@ if (pullRequestNumber) {
         }))
         .then(({data}) => {
             outputMergeCommitHash(data);
+            outputHeadCommitHash(data);
             outputMergeActor(data);
         });
 }
