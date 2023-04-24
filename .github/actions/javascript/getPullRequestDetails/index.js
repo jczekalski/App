@@ -43,8 +43,7 @@ if (titleRegex) {
 function outputMergeCommitHash(PR) {
     if (!_.isEmpty(PR)) {
         console.log(`Found matching pull request: ${PR.html_url}`);
-        console.log(`PR data: ${JSON.stringify(PR)}`);
-        core.setOutput('MERGE_COMMIT_SHA', 'a888bdbeef8c24ddf3221edc8c19f8f1712c1ba8');
+        core.setOutput('MERGE_COMMIT_SHA', PR.state === 'open' ? PR.head.sha : PR.merge_commit_sha);
     } else {
         const err = new Error('Could not find matching pull request');
         console.error(err);
