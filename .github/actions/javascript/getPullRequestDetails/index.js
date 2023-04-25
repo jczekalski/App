@@ -95,7 +95,7 @@ function outputMergeActor(PR) {
 function outputStatus(PR) {
     if (!_.isEmpty(PR)) {
         console.log(`Found matching pull request: ${PR.html_url}`);
-        core.setOutput('PR_STATUS', PR.status);
+        core.setOutput('PR_STATUS', PR.state);
     } else {
         const err = new Error('Could not find matching pull request');
         console.error(err);
