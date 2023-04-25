@@ -22,7 +22,7 @@ jobs:
     outputs:
       VERSION: ${{ steps.getMostRecentRelease.outputs.VERSION }}
       DELTA_REF: ${{ steps.getMergeCommitSha.outputs.MERGE_COMMIT_SHA }}  
-      steps:
+    steps:
       - uses: actions/checkout@93ea575cb5d8a053eaa0ac8fa3b40d7e05a33cc8
 
       - name: Get most recent release version
@@ -40,10 +40,10 @@ jobs:
           user: ${{ github.actor }}
 
       - name: Merge changes locally if PR is open
-        if: steps.getPullRequestDetails.outputs.PR_STATUS == "open"
+        if: steps.getPullRequestDetails.outputs.PR_STATUS == 'open'
         run: |
-        git checkout main
-        git merge --no-commit ${{ steps.getPullRequestDetails.outputs.PR_HEAD }}
+          git checkout main
+          git merge --no-commit ${{ steps.getPullRequestDetails.outputs.PR_HEAD }}
 
       - name: Get pull request details post merge
         id: getPullRequestDetails2
