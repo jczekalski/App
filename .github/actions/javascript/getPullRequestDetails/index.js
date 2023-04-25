@@ -43,6 +43,7 @@ if (titleRegex) {
 function outputMergeCommitHash(PR) {
     if (!_.isEmpty(PR)) {
         console.log(`Found matching pull request: ${PR.html_url}`);
+        console.log('MERGE_COMMIT_SHA', PR.merge_commit_sha);
         core.setOutput('MERGE_COMMIT_SHA', PR.merge_commit_sha);
     } else {
         const err = new Error('Could not find matching pull request');
@@ -59,6 +60,7 @@ function outputMergeCommitHash(PR) {
 function outputHeadCommitHash(PR) {
     if (!_.isEmpty(PR)) {
         console.log(`Found matching pull request: ${PR.html_url}`);
+        console.log('HEAD_COMMIT_SHA', PR.head.sha);
         core.setOutput('HEAD_COMMIT_SHA', PR.head.sha);
     } else {
         const err = new Error('Could not find matching pull request');
@@ -95,6 +97,8 @@ function outputMergeActor(PR) {
 function outputStatus(PR) {
     if (!_.isEmpty(PR)) {
         console.log(`Found matching pull request: ${PR.html_url}`);
+        console.log('PR_STATUS', PR.state);
+        console.log('All PR data', JSON.stringify(PR));
         core.setOutput('PR_STATUS', PR.state);
     } else {
         const err = new Error('Could not find matching pull request');
