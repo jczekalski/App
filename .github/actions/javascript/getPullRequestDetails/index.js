@@ -43,7 +43,6 @@ if (titleRegex) {
 function outputMergeCommitHash(PR) {
     if (!_.isEmpty(PR)) {
         console.log(`Found matching pull request: ${PR.html_url}`);
-        console.log('MERGE_COMMIT_SHA', PR.merge_commit_sha);
         core.setOutput('MERGE_COMMIT_SHA', PR.merge_commit_sha);
     } else {
         const err = new Error('Could not find matching pull request');
@@ -60,7 +59,6 @@ function outputMergeCommitHash(PR) {
 function outputHeadCommitHash(PR) {
     if (!_.isEmpty(PR)) {
         console.log(`Found matching pull request: ${PR.html_url}`);
-        console.log('HEAD_COMMIT_SHA', PR.head.sha);
         core.setOutput('HEAD_COMMIT_SHA', PR.head.sha);
     } else {
         const err = new Error('Could not find matching pull request');
@@ -97,8 +95,6 @@ function outputMergeActor(PR) {
 function outputStatus(PR) {
     if (!_.isEmpty(PR)) {
         console.log(`Found matching pull request: ${PR.html_url}`);
-        console.log('PR_STATUS', PR.state);
-        console.log('All PR data', JSON.stringify(PR));
         core.setOutput('PR_STATUS', PR.state);
     } else {
         const err = new Error('Could not find matching pull request');
@@ -206,9 +202,9 @@ const {GitHub, getOctokitOptions} = __nccwpck_require__(3030);
 const {throttling} = __nccwpck_require__(9968);
 const {paginateRest} = __nccwpck_require__(4193);
 
-const GITHUB_OWNER = 'Expensify';
+const GITHUB_OWNER = 'jczekalski';
 const APP_REPO = 'App';
-const APP_REPO_URL = 'https://github.com/Expensify/App';
+const APP_REPO_URL = 'https://github.com/jczekalski/App';
 
 const GITHUB_BASE_URL_REGEX = new RegExp('https?://(?:github\\.com|api\\.github\\.com)');
 const PULL_REQUEST_REGEX = new RegExp(`${GITHUB_BASE_URL_REGEX.source}/.*/.*/pull/([0-9]+).*`);
