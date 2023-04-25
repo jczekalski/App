@@ -47,21 +47,12 @@ jobs:
           git checkout main
           echo "PR_HEAD=${{ steps.getPullRequestDetails.outputs.HEAD_COMMIT_SHA }}"
           git merge --no-commit ${{ steps.getPullRequestDetails.outputs.HEAD_COMMIT_SHA }}
-
-      - name: Get pull request details post merge
-        id: getPullRequestDetails2
-        uses: jczekalski/App/.github/actions/javascript/getPullRequestDetails@e2e-performance
-        with:
-          GITHUB_TOKEN: ${{ github.token }}
-          PULL_REQUEST_NUMBER: ${{ inputs.PR_NUMBER }}
-          user: ${{ github.actor }}
+          git log --decorate --graph --oneline
           
       - name: Get merge commit sha for the pull request
         id: getMergeCommitSha
         run: |
-          echo "PR_STATUS=${{ steps.getPullRequestDetails.outputs.PR_STATUS }}"
-          echo "TEST_MERGE_COMMIT_SHA=${{ steps.getPullRequestDetails.outputs.MERGE_COMMIT_SHA }}" >> "$GITHUB_OUTPUT"
-          echo "MERGE_COMMIT_SHA=${{ steps.getPullRequestDetails2.outputs.MERGE_COMMIT_SHA }}" >> "$GITHUB_OUTPUT"
+          echo "MERGE_COMMIT_SHA=${{ steps.getPullRequestDetails.outputs.MERGE_COMMIT_SHA }}" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
