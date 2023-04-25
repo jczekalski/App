@@ -46,7 +46,9 @@ jobs:
         run: |
           git checkout main
           echo "PR_HEAD=${{ steps.getPullRequestDetails.outputs.HEAD_COMMIT_SHA }}"
-          git merge --no-commit ${{ steps.getPullRequestDetails.outputs.HEAD_COMMIT_SHA }}
+          git merge ${{ steps.getPullRequestDetails.outputs.HEAD_COMMIT_SHA }}
+          echo "Merge commit SHA:"
+          git rev-parse HEAD
           git log --decorate --graph --oneline
           
       - name: Get merge commit sha for the pull request
