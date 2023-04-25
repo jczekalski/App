@@ -78,6 +78,22 @@ function outputMergeActor(PR) {
 }
 
 /**
+ * Process a pull request and outputs its status.
+ *
+ * @param {Object} PR
+ */
+function outputStatus(PR) {
+    if (!_.isEmpty(PR)) {
+        console.log(`Found matching pull request: ${PR.html_url}`);
+        core.setOutput('PR_STATUS', PR.status);
+    } else {
+        const err = new Error('Could not find matching pull request');
+        console.error(err);
+        core.setFailed(err);
+    }
+}
+
+/**
  * Handle an unknown API error.
  *
  * @param {Error} err
@@ -96,6 +112,7 @@ if (pullRequestNumber) {
             outputMergeCommitHash(data);
             outputHeadCommitHash(data);
             outputMergeActor(data);
+            outputStatus(data);
         })
         .catch(handleUnknownError);
 } else {
@@ -112,5 +129,6 @@ if (pullRequestNumber) {
             outputMergeCommitHash(data);
             outputHeadCommitHash(data);
             outputMergeActor(data);
+            outputStatus(data);
         });
 }
