@@ -56,7 +56,7 @@ jobs:
       - name: Get merge commit sha for the pull request
         id: getMergeCommitSha
         run: |
-          ech "PR_STATUS=${{ steps.getPullRequestDetails.outputs.PR_STATUS }}"
+          echo "PR_STATUS=${{ steps.getPullRequestDetails.outputs.PR_STATUS }}"
           echo "TEST_MERGE_COMMIT_SHA=${{ steps.getPullRequestDetails.outputs.MERGE_COMMIT_SHA }}" >> "$GITHUB_OUTPUT"
           echo "MERGE_COMMIT_SHA=${{ steps.getPullRequestDetails2.outputs.MERGE_COMMIT_SHA }}" >> "$GITHUB_OUTPUT"
         env:
