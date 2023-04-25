@@ -45,8 +45,8 @@ jobs:
         if: steps.getPullRequestDetails.outputs.PR_STATUS == 'open'
         run: |
           git checkout main
-          echo "PR_HEAD=${{ steps.getPullRequestDetails.outputs.PR_HEAD }}"
-          git merge --no-commit ${{ steps.getPullRequestDetails.outputs.PR_HEAD }}
+          echo "PR_HEAD=${{ steps.getPullRequestDetails.outputs.HEAD_COMMIT_SHA }}"
+          git merge --no-commit ${{ steps.getPullRequestDetails.outputs.HEAD_COMMIT_SHA }}
 
       - name: Get pull request details post merge
         id: getPullRequestDetails2
