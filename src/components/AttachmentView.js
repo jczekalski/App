@@ -15,6 +15,7 @@ import Tooltip from './Tooltip';
 import themeColors from '../styles/themes/default';
 import variables from '../styles/variables';
 import addEncryptedAuthTokenToURL from '../libs/addEncryptedAuthTokenToURL';
+import VideoView from './VideoView';
 
 const propTypes = {
     /** Whether source url requires authentication */
@@ -108,6 +109,27 @@ const AttachmentView = (props) => {
             <ImageView
                 url={props.source}
                 isAuthTokenRequired={isImage && props.isAuthTokenRequired}
+            />
+        );
+        return props.onPress ? (
+            <Pressable
+                onPress={props.onPress}
+                disabled={loadComplete}
+                style={containerStyles}
+            >
+                {children}
+            </Pressable>
+        ) : (
+            children
+        );
+    }
+
+    const isVideo = Str.isVideo(props.source);
+    if (isVideo || (props.file && Str.isVideo(props.file.name))) {
+        const children = (
+            <VideoView
+                url={props.source}
+                isAuthTokenRequired={false}
             />
         );
         return props.onPress ? (

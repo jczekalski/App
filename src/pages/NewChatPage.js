@@ -210,6 +210,7 @@ class NewChatPage extends Component {
     render() {
         const maxParticipantsReached = this.state.selectedOptions.length === CONST.REPORT.MAXIMUM_PARTICIPANTS;
         const sections = this.getSections(maxParticipantsReached);
+        console.log(sections);
         const headerMessage = OptionsListUtils.getHeaderMessage(
             this.state.personalDetails.length + this.state.recentReports.length !== 0,
             Boolean(this.state.userToInvite),

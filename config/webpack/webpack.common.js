@@ -21,6 +21,7 @@ const includeModules = [
     'react-native-flipper',
     'react-native-google-places-autocomplete',
     '@react-navigation/drawer',
+    'react-native-video',
 ].join('|');
 
 const envToLogoSuffixMap = {

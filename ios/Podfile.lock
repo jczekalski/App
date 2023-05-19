@@ -244,6 +244,8 @@ PODS:
     - RNPermissions
   - Plaid (4.1.0)
   - PromisesObjC (2.2.0)
+  - PromisesSwift (2.2.0):
+    - PromisesObjC (= 2.2.0)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -541,6 +543,12 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
+  - react-native-video (6.0.0-alpha.6):
+    - React-Core
+    - react-native-video/Video (= 6.0.0-alpha.6)
+  - react-native-video/Video (6.0.0-alpha.6):
+    - PromisesSwift
+    - React-Core
   - react-native-webview (11.23.0):
     - React-Core
   - React-perflogger (0.71.2-alpha.3)
@@ -781,6 +789,7 @@ DEPENDENCIES:
   - react-native-quick-sqlite (from `../node_modules/react-native-quick-sqlite`)
   - react-native-render-html (from `../node_modules/react-native-render-html`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -850,6 +859,7 @@ SPEC REPOS:
     - OpenSSL-Universal
     - Plaid
     - PromisesObjC
+    - PromisesSwift
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
@@ -944,6 +954,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-render-html"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-video:
+    :path: "../node_modules/react-native-video"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-perflogger:
@@ -1014,7 +1026,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Airship: c70eed50e429f97f5adb285423c7291fb7a032ae
   AirshipFrameworkProxy: 2eefb77bb77b5120b0f48814b0d44439aa3ad415
-  boost: a7c83b31436843459a1961bfd74b96033dc77234
+  boost: 57d2868c099736d80fcd648bf211b4431e51a558
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: ff54429f0110d3c722630a98096ba689c39f6d5f
@@ -1057,7 +1069,8 @@ SPEC CHECKSUMS:
   Permission-LocationWhenInUse: 3ba99e45c852763f730eabecec2870c2382b7bd4
   Plaid: 7d340abeadb46c7aa1a91f896c5b22395a31fcf2
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
-  RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
+  PromisesSwift: cf9eb58666a43bbe007302226e510b16c1e10959
+  RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: e9e7b8b45aa9bedb2fdad71740adf07a7265b9be
   RCTTypeSafety: 9ae0e9206625e995f0df4d5b9ddc94411929fb30
   React: a71c8e1380f07e01de721ccd52bcf9c03e81867d
@@ -1089,6 +1102,7 @@ SPEC CHECKSUMS:
   react-native-quick-sqlite: bcc7a7a250a40222f18913a97cd356bf82d0a6c4
   react-native-render-html: 96c979fe7452a0a41559685d2f83b12b93edac8c
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
+  react-native-video: fee89269ad07556d960721f3b62e39be6ace3c90
   react-native-webview: e771bc375f789ebfa02a26939a57dbc6fa897336
   React-perflogger: 9f7c5a9d22d104ae0348f38235ee636d156b5938
   React-RCTActionSheet: 43e74f3a54967bb1d0e9ff261bc076843fb50ca1
@@ -1129,4 +1143,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: cd132e281e9e3d7e6ec2c99c08e6ec32b37886f8
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
