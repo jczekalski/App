@@ -1,18 +1,14 @@
-import React, {PureComponent, createElement, Component, ReactEventHandler, createRef} from 'react';
+import React, {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
 import {Pressable, Text, View} from 'react-native';
-// import Video from 'react-native-video';
-import {unstable_createElement} from 'react-native-web';
-import styles from '../styles/styles';
-import * as DeviceCapabilities from '../libs/DeviceCapabilities';
-import withWindowDimensions, {windowDimensionsPropTypes} from './withWindowDimensions';
-import FullScreenLoadingIndicator from './FullscreenLoadingIndicator';
+import styles from '../../styles/styles';
+import withWindowDimensions, {windowDimensionsPropTypes} from '../withWindowDimensions';
 
 const propTypes = {
     /** Whether source url requires authentication */
     isAuthTokenRequired: PropTypes.bool,
 
-    /** URL to full-sized image */
+    /** URL to video */
     url: PropTypes.string.isRequired,
     ...windowDimensionsPropTypes,
 };
@@ -24,7 +20,6 @@ const defaultProps = {
 class VideoView extends PureComponent {
     constructor(props) {
         super(props);
-        this.canUseTouchScreen = DeviceCapabilities.canUseTouchScreen();
         this.player = React.createRef(null);
         this.onBuffer = this.onBuffer.bind(this);
         this.onError = this.onError.bind(this);
@@ -39,10 +34,7 @@ class VideoView extends PureComponent {
     }
 
     render() {
-        console.log('did render video view', this.props.url);
-        if (this.canUseTouchScreen) {
-            return <View style={[styles.imageViewContainer, styles.overflowHidden]} />;
-        }
+        console.log('did render web video view', this.props.url);
         return (
             <View
                 ref={(el) => (this.scrollableRef = el)}
