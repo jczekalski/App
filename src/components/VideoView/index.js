@@ -2,20 +2,13 @@ import React, {PureComponent, createElement} from 'react';
 import PropTypes from 'prop-types';
 import {Pressable, Text, View} from 'react-native';
 import styles from '../../styles/styles';
-import withWindowDimensions, {windowDimensionsPropTypes} from '../withWindowDimensions';
 
 const propTypes = {
-    /** Whether source url requires authentication */
-    isAuthTokenRequired: PropTypes.bool,
-
     /** URL to video */
     url: PropTypes.string.isRequired,
-    ...windowDimensionsPropTypes,
 };
 
-const defaultProps = {
-    isAuthTokenRequired: false,
-};
+const defaultProps = {};
 
 class VideoView extends PureComponent {
     constructor(props) {
@@ -25,8 +18,8 @@ class VideoView extends PureComponent {
         this.onError = this.onError.bind(this);
     }
 
-    onBuffer() {
-        console.log('buffered!');
+    onBuffer(e) {
+        console.log('buffering', e);
     }
 
     onError(e) {
@@ -51,9 +44,7 @@ class VideoView extends PureComponent {
                     <Text style={{color: 'white'}}>is not touch screen</Text>
                     {createElement('video', {
                         src: this.props.url,
-                        onError: (e) => {
-                            console.log('error during video playback', e);
-                        },
+                        onError: this.onError,
                         controls: true,
                         autoPlay: true,
                     })}
@@ -65,4 +56,4 @@ class VideoView extends PureComponent {
 
 VideoView.propTypes = propTypes;
 VideoView.defaultProps = defaultProps;
-export default withWindowDimensions(VideoView);
+export default VideoView;

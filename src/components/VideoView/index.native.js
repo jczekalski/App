@@ -2,22 +2,14 @@ import React, {PureComponent} from 'react';
 import Video from 'react-native-video';
 import PropTypes from 'prop-types';
 import {View} from 'react-native';
-// import Video from 'react-native-video';
 import styles from '../../styles/styles';
-import withWindowDimensions, {windowDimensionsPropTypes} from '../withWindowDimensions';
 
 const propTypes = {
-    /** Whether source url requires authentication */
-    isAuthTokenRequired: PropTypes.bool,
-
     /** URL to video */
     url: PropTypes.string.isRequired,
-    ...windowDimensionsPropTypes,
 };
 
-const defaultProps = {
-    isAuthTokenRequired: false,
-};
+const defaultProps = {};
 
 class VideoView extends PureComponent {
     constructor(props) {
@@ -27,8 +19,8 @@ class VideoView extends PureComponent {
         this.onError = this.onError.bind(this);
     }
 
-    onBuffer() {
-        console.log('buffered!');
+    onBuffer(e) {
+        console.log('buffering', e);
     }
 
     onError(e) {
@@ -45,7 +37,7 @@ class VideoView extends PureComponent {
                         this.player = ref;
                     }} // Store reference
                     onBuffer={this.onBuffer} // Callback when remote video is buffering
-                    onError={this.videoError} // Callback when video cannot be loaded
+                    onError={this.onError} // Callback when video cannot be loaded
                     style={{position: 'absolute', top: 0, left: 0, bottom: 0, right: 0}}
                 />
             </View>
@@ -55,4 +47,4 @@ class VideoView extends PureComponent {
 
 VideoView.propTypes = propTypes;
 VideoView.defaultProps = defaultProps;
-export default withWindowDimensions(VideoView);
+export default VideoView;

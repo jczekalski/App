@@ -126,12 +126,7 @@ const AttachmentView = (props) => {
 
     const isVideo = Str.isVideo(props.source);
     if (isVideo || (props.file && Str.isVideo(props.file.name))) {
-        const children = (
-            <VideoView
-                url={props.source}
-                isAuthTokenRequired={false}
-            />
-        );
+        const children = <VideoView url={props.source} />;
         return props.onPress ? (
             <Pressable
                 onPress={props.onPress}
