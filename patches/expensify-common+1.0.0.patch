@@ -1,0 +1,15 @@
+diff --git a/node_modules/expensify-common/lib/str.js b/node_modules/expensify-common/lib/str.js
+index 7cab4f9..15a53a0 100644
+--- a/node_modules/expensify-common/lib/str.js
++++ b/node_modules/expensify-common/lib/str.js
+@@ -1071,6 +1071,10 @@ const Str = {
+         return _.contains(['jpeg', 'jpg', 'gif', 'png', 'bmp', 'webp'], this.getExtension(url));
+     },
+ 
++    isVideo(url) {
++        return _.contains(['mov', 'mp4'], this.getExtension(url));
++    },
++
+     /**
+      * Checks whether the given string is a +@ domain email account, such as
+      * +@domain.com
