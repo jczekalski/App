@@ -41,7 +41,6 @@ class VideoView extends PureComponent {
                     onPressIn={this.onContainerPressIn}
                     onPress={this.onContainerPress}
                 >
-                    <Text style={{color: 'white'}}>is not touch screen</Text>
                     {createElement('video', {
                         src: this.props.url,
                         onError: this.onError,

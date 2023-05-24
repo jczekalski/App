@@ -1,11 +1,11 @@
 const path = require('path');
+const fs = require('fs');
 const {IgnorePlugin, DefinePlugin, ProvidePlugin, EnvironmentPlugin} = require('webpack');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const dotenv = require('dotenv');
 const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
-const HtmlInlineScriptPlugin = require('html-inline-script-webpack-plugin');
 const FontPreloadPlugin = require('webpack-font-preload-plugin');
 const CustomVersionFilePlugin = require('./CustomVersionFilePlugin');
 
@@ -22,6 +22,8 @@ const includeModules = [
     'react-native-google-places-autocomplete',
     '@react-navigation/drawer',
     'react-native-video',
+    'react-native-qrcode-svg',
+    'react-native-view-shot',
 ].join('|');
 
 const envToLogoSuffixMap = {
@@ -51,7 +53,6 @@ const webpackConfig = ({envFile = '.env', platform = 'web'}) => ({
     devtool: 'source-map',
     entry: {
         main: ['babel-polyfill', './index.js'],
-        splash: ['./web/splash/splash.js'],
     },
     output: {
         filename: '[name]-[contenthash].bundle.js',
@@ -72,10 +73,9 @@ const webpackConfig = ({envFile = '.env', platform = 'web'}) => ({
         new HtmlWebpackPlugin({
             template: 'web/index.html',
             filename: 'index.html',
+            splashLogo: fs.readFileSync(path.resolve(__dirname, `../../assets/images/new-expensify${mapEnvToLogoSuffix(envFile)}.svg`), 'utf-8'),
             usePolyfillIO: platform === 'web',
-        }),
-        new HtmlInlineScriptPlugin({
-            scriptMatchPattern: [/splash.+[.]js$/],
+            isStaging: envFile === '.env.staging',
         }),
         new FontPreloadPlugin({
             extensions: ['woff2'],
@@ -173,18 +173,6 @@ const webpackConfig = ({envFile = '.env', platform = 'web'}) => ({
                 ],
             },
             {
-                test: /splash.css$/i,
-                use: [
-                    {
-                        loader: 'style-loader',
-                        options: {
-                            insert: 'head',
-                            injectType: 'singletonStyleTag',
-                        },
-                    },
-                ],
-            },
-            {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
             },
@@ -200,7 +188,6 @@ const webpackConfig = ({envFile = '.env', platform = 'web'}) => ({
     },
     resolve: {
         alias: {
-            logo$: path.resolve(__dirname, `../../assets/images/new-expensify${mapEnvToLogoSuffix(envFile)}.svg`),
             'react-native-config': 'react-web-config',
             'react-native$': '@expensify/react-native-web',
             'react-native-web': '@expensify/react-native-web',
