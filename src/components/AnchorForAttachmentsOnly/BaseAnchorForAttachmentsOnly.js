@@ -15,8 +15,12 @@ import * as ReportUtils from '../../libs/ReportUtils';
 import AttachmentModal from '../AttachmentModal';
 import * as Expensicons from '../Icon/Expensicons';
 import Icon from '../Icon';
+import styles from '../../styles/styles';
+import ThumbnailImage from '../ThumbnailImage';
 
 const videoContainerWidth = 250;
+const thumbnailImageModeEnabled = true;
+const placeholderThumbnailImage = 'https://d33v4339jhl8k0.cloudfront.net/docs/assets/591c8a010428634b4a33375c/images/5ab4866b2c7d3a56d8873f4c/file-MrylO8jADD.png';
 
 const propTypes = {
     /** Press in handler for the link */
@@ -48,6 +52,29 @@ const BaseAnchorForAttachmentsOnly = (props) => {
 
     const isDownloading = props.download && props.download.isDownloading;
 
+    const VideoOrThumbnailImage = ({showModal}) =>
+        thumbnailImageModeEnabled ? (
+            <ThumbnailImage
+                previewSourceURL={placeholderThumbnailImage}
+                style={styles.webViewStyles.tagStyles.img}
+                isAuthTokenRequired
+                imageWidth={videoContainerWidth}
+            />
+        ) : (
+            <View style={{width: videoContainerWidth, ...styles.webViewStyles.tagStyles.img}}>
+                <AttachmentView
+                    source={sourceURLWithAuth}
+                    file={{name: fileName}}
+                />
+                <Pressable
+                    onPress={showModal}
+                    style={{position: 'absolute', top: 10, right: 10}}
+                >
+                    <Icon src={Expensicons.Expand} />
+                </Pressable>
+            </View>
+        );
+
     return (
         <ShowContextMenuContext.Consumer>
             {({anchor, report, action, checkIfContextMenuActive}) =>
@@ -62,20 +89,10 @@ const BaseAnchorForAttachmentsOnly = (props) => {
                         {({show}) => (
                             <Pressable
                                 style={props.style}
+                                onPress={thumbnailImageModeEnabled ? show : undefined}
                                 onLongPress={(event) => showContextMenuForReport(event, anchor, report.reportID, action, checkIfContextMenuActive, ReportUtils.isArchivedRoom(report))}
                             >
-                                <View style={{width: videoContainerWidth}}>
-                                    <AttachmentView
-                                        source={sourceURLWithAuth}
-                                        file={{name: fileName}}
-                                    />
-                                    <Pressable
-                                        onPress={show}
-                                        style={{position: 'absolute', top: 10, right: 10}}
-                                    >
-                                        <Icon src={Expensicons.Expand} />
-                                    </Pressable>
-                                </View>
+                                <VideoOrThumbnailImage showModal={show} />
                             </Pressable>
                         )}
                     </AttachmentModal>
