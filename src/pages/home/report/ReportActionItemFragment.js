@@ -111,7 +111,7 @@ const ReportActionItemFragment = (props) => {
                 const isPendingDelete = props.pendingAction === CONST.RED_BRICK_ROAD_PENDING_ACTION.DELETE && props.network.isOffline;
                 const editedTag = props.fragment.isEdited ? '<edited></edited>' : '';
                 const htmlContent = applyStrikethrough(html + editedTag, isPendingDelete);
-                console.log('htmlContent', htmlContent);
+                // console.log('htmlContent', htmlContent);
 
                 return <RenderHTML html={props.source === 'email' ? `<email-comment>${htmlContent}</email-comment>` : `<comment>${htmlContent}</comment>`} />;
             }

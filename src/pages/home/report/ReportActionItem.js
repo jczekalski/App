@@ -161,6 +161,8 @@ function ReportActionItem(props) {
         [props.report, props.action],
     );
 
+    // console.log(JSON.stringify(props.action, null, 2))
+
     /**
      * Get the content of ReportActionItem
      * @param {Boolean} hovered whether the ReportActionItem is hovered

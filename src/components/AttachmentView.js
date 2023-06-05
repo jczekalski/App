@@ -15,7 +15,7 @@ import Tooltip from './Tooltip';
 import themeColors from '../styles/themes/default';
 import variables from '../styles/variables';
 import addEncryptedAuthTokenToURL from '../libs/addEncryptedAuthTokenToURL';
-import VideoView from './VideoView';
+import VideoPlayer from './VideoPlayer';
 
 const propTypes = {
     /** Whether source url requires authentication */
@@ -131,7 +131,7 @@ const AttachmentView = (props) => {
 
     const isVideo = Str.isVideo(props.source);
     if (isVideo || (props.file && Str.isVideo(props.file.name))) {
-        const children = <VideoView url={props.source} />;
+        const children = <VideoPlayer url={props.source} />;
         return props.onPress ? (
             <Pressable
                 onPress={props.onPress}
