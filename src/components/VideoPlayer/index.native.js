@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
+import {View} from 'react-native';
 import Video from 'react-native-video';
 import PropTypes from 'prop-types';
-// import styles from '../../styles/styles';
+import styles from '../../styles/styles';
+import FullscreenLoadingIndicator from '../FullscreenLoadingIndicator';
 
 const propTypes = {
     /** URL to video */
@@ -12,6 +14,7 @@ const defaultProps = {};
 
 const VideoPlayer = (props) => {
     const [aspectRatio, setAspectRatio] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     const urlWithoutAuthToken = props.url.split('?')[0];
 
@@ -23,22 +26,29 @@ const VideoPlayer = (props) => {
         console.log(`${urlWithoutAuthToken} video playback error`, e);
     };
 
+    const onLoad = (data) => {
+        const {width, height} = data.naturalSize;
+
+        setAspectRatio(width / height);
+        setIsLoading(false);
+    };
+
     return (
-        <Video
-            source={{uri: props.url}}
-            controls
-            onBuffer={onBuffer}
-            onError={onError}
-            onLoad={(response) => {
-                const {width, height} = response.naturalSize;
-                setAspectRatio(width / height);
-            }}
-            style={{width: '100%', aspectRatio}}
-            resizeMode="contain"
-            playInBackground={false}
-            playWhenInactive={false}
-            paused
-        />
+        <View>
+            <Video
+                source={{uri: props.url}}
+                controls
+                onBuffer={onBuffer}
+                onError={onError}
+                onLoad={onLoad}
+                style={{width: '100%', aspectRatio}}
+                resizeMode="contain"
+                playInBackground={false}
+                playWhenInactive={false}
+                paused
+            />
+            {isLoading && <FullscreenLoadingIndicator style={[styles.opacity1, styles.bgTransparent]} />}
+        </View>
     );
 };
 
