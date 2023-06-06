@@ -3,6 +3,7 @@ import {View, FlatList, PixelRatio} from 'react-native';
 import PropTypes from 'prop-types';
 import {withOnyx} from 'react-native-onyx';
 import _ from 'underscore';
+import Str from 'expensify-common/lib/str';
 import * as Expensicons from '../Icon/Expensicons';
 import styles from '../../styles/styles';
 import themeColors from '../../styles/themes/default';
@@ -176,6 +177,15 @@ class AttachmentCarousel extends React.Component {
                 return;
             }
             const matches = [...originalMessage.html.matchAll(CONST.REGEX.ATTACHMENT_DATA)];
+
+            // matchAll captured both source url
+            if (matches.length === 1) {
+                const [originalSource] = _.map(matches, (m) => m[2]);
+
+                if (Str.isVideo(originalSource)) {
+                    attachments.push({source: originalSource, file: {name: 'video'}});
+                }
+            }
 
             // matchAll captured both source url and name of the attachment
             if (matches.length === 2) {

@@ -81,7 +81,7 @@ const BaseAnchorForAttachmentsOnly = (props) => {
                 Str.isVideo(sourceURL) ? (
                     <AttachmentModal
                         allowDownload
-                        reportID={null}
+                        reportID={report.reportID}
                         source={sourceURLWithAuth}
                         isAuthTokenRequired={props.isAuthTokenRequired}
                         originalFileName={props.displayName}
