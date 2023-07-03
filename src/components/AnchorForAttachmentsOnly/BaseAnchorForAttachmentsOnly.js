@@ -17,6 +17,7 @@ import * as Expensicons from '../Icon/Expensicons';
 import Icon from '../Icon';
 import styles from '../../styles/styles';
 import ThumbnailImage from '../ThumbnailImage';
+import PressableWithoutFeedback from '../Pressable/PressableWithoutFeedback';
 
 const videoContainerWidth = 250;
 const thumbnailImageModeEnabled = true;
@@ -44,7 +45,7 @@ const defaultProps = {
     ...anchorForAttachmentsOnlyDefaultProps,
 };
 
-const BaseAnchorForAttachmentsOnly = (props) => {
+function BaseAnchorForAttachmentsOnly(props) {
     const sourceURL = props.source;
     const sourceURLWithAuth = addEncryptedAuthTokenToURL(sourceURL);
     const sourceID = (sourceURL.match(CONST.REGEX.ATTACHMENT_ID) || [])[1];
@@ -97,7 +98,7 @@ const BaseAnchorForAttachmentsOnly = (props) => {
                         )}
                     </AttachmentModal>
                 ) : (
-                    <Pressable
+                    <PressableWithoutFeedback
                         style={props.style}
                         onPress={() => {
                             if (isDownloading) {
@@ -109,6 +110,8 @@ const BaseAnchorForAttachmentsOnly = (props) => {
                         onPressIn={props.onPressIn}
                         onPressOut={props.onPressOut}
                         onLongPress={(event) => showContextMenuForReport(event, anchor, report.reportID, action, checkIfContextMenuActive, ReportUtils.isArchivedRoom(report))}
+                        accessibilityLabel={fileName}
+                        accessibilityRole="button"
                     >
                         <AttachmentView
                             source={sourceURLWithAuth}
@@ -116,12 +119,12 @@ const BaseAnchorForAttachmentsOnly = (props) => {
                             shouldShowDownloadIcon
                             shouldShowLoadingSpinnerIcon={isDownloading}
                         />
-                    </Pressable>
+                    </PressableWithoutFeedback>
                 )
             }
         </ShowContextMenuContext.Consumer>
     );
-};
+}
 
 BaseAnchorForAttachmentsOnly.displayName = 'BaseAnchorForAttachmentsOnly';
 BaseAnchorForAttachmentsOnly.propTypes = propTypes;

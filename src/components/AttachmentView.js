@@ -1,5 +1,5 @@
 import React, {memo, useState} from 'react';
-import {View, ActivityIndicator, Pressable} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 import _ from 'underscore';
 import PropTypes from 'prop-types';
 import Str from 'expensify-common/lib/str';
@@ -16,6 +16,7 @@ import themeColors from '../styles/themes/default';
 import variables from '../styles/variables';
 import addEncryptedAuthTokenToURL from '../libs/addEncryptedAuthTokenToURL';
 import VideoPlayer from './VideoPlayer';
+import PressableWithoutFeedback from './Pressable/PressableWithoutFeedback';
 
 const propTypes = {
     /** Whether source url requires authentication */
@@ -38,7 +39,7 @@ const propTypes = {
     /** Function for handle on press */
     onPress: PropTypes.func,
 
-    /** Handles scale changed event in PDF component */
+    /** Handles scale changed event */
     onScaleChanged: PropTypes.func,
 
     /** Notify parent that the UI should be modified to accommodate keyboard */
@@ -64,7 +65,7 @@ const defaultProps = {
     containerStyles: [],
 };
 
-const AttachmentView = (props) => {
+function AttachmentView(props) {
     const [loadComplete, setLoadComplete] = useState(false);
     const containerStyles = [styles.flex1, styles.flexRow, styles.alignSelfStretch];
 
@@ -94,13 +95,15 @@ const AttachmentView = (props) => {
             />
         );
         return props.onPress ? (
-            <Pressable
+            <PressableWithoutFeedback
                 onPress={props.onPress}
                 disabled={loadComplete}
                 style={containerStyles}
+                accessibilityRole="imagebutton"
+                accessibilityLabel={props.file.name || props.translate('attachmentView.unknownFilename')}
             >
                 {children}
-            </Pressable>
+            </PressableWithoutFeedback>
         ) : (
             children
         );
@@ -112,18 +115,22 @@ const AttachmentView = (props) => {
     if (isImage || (props.file && Str.isImage(props.file.name))) {
         const children = (
             <ImageView
+                onScaleChanged={props.onScaleChanged}
                 url={props.source}
+                fileName={props.file.name}
                 isAuthTokenRequired={isImage && props.isAuthTokenRequired}
             />
         );
         return props.onPress ? (
-            <Pressable
+            <PressableWithoutFeedback
                 onPress={props.onPress}
                 disabled={loadComplete}
                 style={containerStyles}
+                accessibilityRole="imagebutton"
+                accessibilityLabel={props.file.name || props.translate('attachmentView.unknownFilename')}
             >
                 {children}
-            </Pressable>
+            </PressableWithoutFeedback>
         ) : (
             children
         );
@@ -133,13 +140,13 @@ const AttachmentView = (props) => {
     if (isVideo || (props.file && Str.isVideo(props.file.name))) {
         const children = <VideoPlayer url={props.source} />;
         return props.onPress ? (
-            <Pressable
+            <PressableWithoutFeedback
                 onPress={props.onPress}
                 disabled={loadComplete}
                 style={containerStyles}
             >
                 {children}
-            </Pressable>
+            </PressableWithoutFeedback>
         ) : (
             children
         );
@@ -171,7 +178,7 @@ const AttachmentView = (props) => {
             )}
         </View>
     );
-};
+}
 
 AttachmentView.propTypes = propTypes;
 AttachmentView.defaultProps = defaultProps;
