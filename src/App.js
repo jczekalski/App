@@ -6,6 +6,8 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 import Onyx from 'react-native-onyx';
 import {PortalProvider} from '@gorhom/portal';
 import {PickerStateProvider} from 'react-native-picker-select';
+import Constants from 'expo-constants';
+import {Video} from 'expo-av';
 import CustomStatusBar from './components/CustomStatusBar';
 import ErrorBoundary from './components/ErrorBoundary';
 import Expensify from './Expensify';
@@ -30,6 +32,9 @@ LogBox.ignoreLogs([
     // More details here: https://git.io/JJYeb
     'Setting a timer for a long period of time',
 ]);
+
+console.log('expo test', Constants.systemFonts);
+console.log('expo av', Video);
 
 const fill = {flex: 1};
 

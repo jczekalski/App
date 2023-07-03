@@ -1,3 +1,4 @@
+require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -38,6 +39,15 @@ def __apply_Xcode_14_3_RC_post_install_workaround(installer)
 end
 
 target 'NewExpensify' do
+  use_expo_modules!
+  post_integrate do |installer|
+    begin
+      expo_patch_react_imports!(installer)
+    rescue => e
+      Pod::UI.warn e
+    end
+  end
+
   permissions_path = '../node_modules/react-native-permissions/ios'
 
   pod 'Permission-LocationAccuracy', :path => "#{permissions_path}/LocationAccuracy"
