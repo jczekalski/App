@@ -20,8 +20,11 @@ import stylePropTypes from '../styles/stylePropTypes';
 import * as FileUtils from '../libs/fileDownload/FileUtils';
 import getImageResolution from '../libs/fileDownload/getImageResolution';
 import PressableWithoutFeedback from './Pressable/PressableWithoutFeedback';
+import AttachmentModal from './AttachmentModal';
 import DotIndicatorMessage from './DotIndicatorMessage';
 import * as Browser from '../libs/Browser';
+import withNavigationFocus, {withNavigationFocusPropTypes} from './withNavigationFocus';
+import compose from '../libs/compose';
 
 const propTypes = {
     /** Avatar source to display */
@@ -60,7 +63,7 @@ const propTypes = {
     size: PropTypes.oneOf([CONST.AVATAR_SIZE.LARGE, CONST.AVATAR_SIZE.DEFAULT]),
 
     /** A fallback avatar icon to display when there is an error on loading avatar from remote URL. */
-    fallbackIcon: PropTypes.func,
+    fallbackIcon: PropTypes.oneOfType([PropTypes.func, PropTypes.string]),
 
     /** Denotes whether it is an avatar or a workspace avatar */
     type: PropTypes.oneOf([CONST.ICON_TYPE_AVATAR, CONST.ICON_TYPE_WORKSPACE]),
@@ -80,6 +83,17 @@ const propTypes = {
     /** The errors to display  */
     // eslint-disable-next-line react/forbid-prop-types
     errors: PropTypes.object,
+
+    /** Title for avatar preview modal */
+    headerTitle: PropTypes.string,
+
+    /** Avatar source for avatar preview modal */
+    previewSource: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+
+    /** File name of the avatar */
+    originalFileName: PropTypes.string,
+
+    ...withNavigationFocusPropTypes,
 };
 
 const defaultProps = {
@@ -97,6 +111,9 @@ const defaultProps = {
     onErrorClose: () => {},
     pendingAction: null,
     errors: null,
+    headerTitle: '',
+    previewSource: '',
+    originalFileName: '',
 };
 
 function AvatarWithImagePicker({
@@ -116,6 +133,9 @@ function AvatarWithImagePicker({
     onImageRemoved,
     onImageSelected,
     onErrorClose,
+    headerTitle,
+    previewSource,
+    originalFileName,
 }) {
     const {translate} = useLocalize();
 
@@ -218,9 +238,10 @@ function AvatarWithImagePicker({
      * Create menu items list for avatar menu
      *
      * @param {Function} openPicker
+     * @param {Function} show
      * @returns {Array}
      */
-    const createMenuItems = (openPicker) => {
+    const createMenuItems = (openPicker, show) => {
         const menuItems = [
             {
                 icon: Expensicons.Upload,
@@ -245,6 +266,12 @@ function AvatarWithImagePicker({
                     setError(null, {});
                     onImageRemoved();
                 },
+            });
+
+            menuItems.push({
+                icon: Expensicons.Eye,
+                text: translate('avatarWithImagePicker.viewPhoto'),
+                onSelected: () => show(),
             });
         }
         return menuItems;
@@ -292,28 +319,37 @@ function AvatarWithImagePicker({
                         </PressableWithoutFeedback>
                     </Tooltip>
                 </OfflineWithFeedback>
-                <AttachmentPicker type={CONST.ATTACHMENT_PICKER_TYPE.IMAGE}>
-                    {({openPicker}) => (
-                        <PopoverMenu
-                            isVisible={isMenuVisible}
-                            onClose={() => setIsMenuVisible(false)}
-                            onItemSelected={(item, index) => {
-                                setIsMenuVisible(false);
-                                // In order for the file picker to open dynamically, the click
-                                // function must be called from within a event handler that was initiated
-                                // by the user on Safari.
-                                if (index === 0 && Browser.isSafari()) {
-                                    openPicker({onPicked: showAvatarCropModal});
-                                }
-                            }}
-                            menuItems={createMenuItems(openPicker)}
-                            anchorPosition={anchorPosition}
-                            withoutOverlay
-                            anchorRef={anchorRef}
-                            anchorAlignment={anchorAlignment}
-                        />
+                <AttachmentModal
+                    headerTitle={headerTitle}
+                    source={previewSource}
+                    originalFileName={originalFileName}
+                    fallbackSource={fallbackIcon}
+                >
+                    {({show}) => (
+                        <AttachmentPicker type={CONST.ATTACHMENT_PICKER_TYPE.IMAGE}>
+                            {({openPicker}) => (
+                                <PopoverMenu
+                                    isVisible={isMenuVisible}
+                                    onClose={() => setIsMenuVisible(false)}
+                                    onItemSelected={(item, index) => {
+                                        setIsMenuVisible(false);
+                                        // In order for the file picker to open dynamically, the click
+                                        // function must be called from within a event handler that was initiated
+                                        // by the user on Safari.
+                                        if (index === 0 && Browser.isSafari()) {
+                                            openPicker({onPicked: showAvatarCropModal});
+                                        }
+                                    }}
+                                    menuItems={createMenuItems(openPicker, show)}
+                                    anchorPosition={anchorPosition}
+                                    withoutOverlay
+                                    anchorRef={anchorRef}
+                                    anchorAlignment={anchorAlignment}
+                                />
+                            )}
+                        </AttachmentPicker>
                     )}
-                </AttachmentPicker>
+                </AttachmentModal>
             </View>
             {validationError && (
                 <DotIndicatorMessage
@@ -339,4 +375,4 @@ AvatarWithImagePicker.propTypes = propTypes;
 AvatarWithImagePicker.defaultProps = defaultProps;
 AvatarWithImagePicker.displayName = 'AvatarWithImagePicker';
 
-export default AvatarWithImagePicker;
+export default withNavigationFocus(AvatarWithImagePicker);

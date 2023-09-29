@@ -76,6 +76,7 @@ function BaseValidateCodeForm(props) {
     const loginData = props.loginList[props.contactMethod];
     const inputValidateCodeRef = useRef();
     const validateLoginError = ErrorUtils.getEarliestErrorField(loginData, 'validateLogin');
+    const shouldDisableResendValidateCode = props.network.isOffline || props.account.isLoading;
 
     useImperativeHandle(props.innerRef, () => ({
         focus() {
@@ -88,6 +89,12 @@ function BaseValidateCodeForm(props) {
 
     useEffect(() => {
         Session.clearAccountMessages();
+        if (!validateLoginError) {
+            return;
+        }
+        User.clearContactMethodErrors(props.contactMethod, 'validateLogin');
+        // contactMethod is not added as a dependency since it does not change between renders
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -104,6 +111,7 @@ function BaseValidateCodeForm(props) {
     const resendValidateCode = () => {
         User.requestContactMethodValidateCode(props.contactMethod);
         setValidateCode('');
+        inputValidateCodeRef.current.clear();
         inputValidateCodeRef.current.focus();
     };
 
@@ -117,11 +125,11 @@ function BaseValidateCodeForm(props) {
             setValidateCode(text);
             setFormError({});
 
-            if (props.account.errors) {
-                Session.clearAccountMessages();
+            if (validateLoginError) {
+                User.clearContactMethodErrors(props.contactMethod, 'validateLogin');
             }
         },
-        [props.account.errors],
+        [validateLoginError, props.contactMethod],
     );
 
     /**
@@ -164,7 +172,7 @@ function BaseValidateCodeForm(props) {
             >
                 <View style={[styles.mt2, styles.dFlex, styles.flexColumn, styles.alignItemsStart]}>
                     <PressableWithFeedback
-                        disabled={props.network.isOffline}
+                        disabled={shouldDisableResendValidateCode}
                         style={[styles.mr1]}
                         onPress={resendValidateCode}
                         underlayColor={themeColors.componentBG}
@@ -173,7 +181,7 @@ function BaseValidateCodeForm(props) {
                         accessibilityRole={CONST.ACCESSIBILITY_ROLE.BUTTON}
                         accessibilityLabel={props.translate('validateCodeForm.magicCodeNotReceived')}
                     >
-                        <Text style={[StyleUtils.getDisabledLinkStyles(props.network.isOffline)]}>{props.translate('validateCodeForm.magicCodeNotReceived')}</Text>
+                        <Text style={[StyleUtils.getDisabledLinkStyles(shouldDisableResendValidateCode)]}>{props.translate('validateCodeForm.magicCodeNotReceived')}</Text>
                     </PressableWithFeedback>
                     {props.hasMagicCodeBeenSent && (
                         <DotIndicatorMessage

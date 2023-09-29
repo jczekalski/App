@@ -31,16 +31,6 @@ class RequestorOnfidoStep extends React.Component {
     constructor(props) {
         super(props);
         this.submit = this.submit.bind(this);
-        this.goBack = this.goBack.bind(this);
-    }
-
-    goBack() {
-        const onfidoBack = document.querySelector('.onfido-sdk-ui-NavigationBar-back');
-        if (onfidoBack && !onfidoBack.classList.contains('onfido-sdk-ui-NavigationBar-disabled')) {
-            onfidoBack.click();
-        } else {
-            this.props.onBackButtonPress();
-        }
     }
 
     submit(onfidoData) {
@@ -54,13 +44,14 @@ class RequestorOnfidoStep extends React.Component {
             <ScreenWrapper
                 includeSafeAreaPaddingBottom={false}
                 shouldShowOfflineIndicator={false}
+                testID={RequestorOnfidoStep.displayName}
             >
                 <HeaderWithBackButton
                     title={this.props.translate('requestorStep.headerTitle')}
                     stepCounter={{step: 3, total: 5}}
                     shouldShowGetAssistanceButton
                     guidesCallTaskID={CONST.GUIDES_CALL_TASK_IDS.WORKSPACE_BANK_ACCOUNT}
-                    onBackButtonPress={this.goBack}
+                    onBackButtonPress={this.props.onBackButtonPress}
                 />
                 <FullPageOfflineBlockingView>
                     <ScrollView contentContainerStyle={styles.flex1}>
